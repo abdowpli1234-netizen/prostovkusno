@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Советы начинающим — ПростоВкусно</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background-color: #FAF8F5;
+      color: #1F2937;
+      line-height: 1.5;
+    }
+
+    /* Шапка сайта */
+    header {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E5E7EB;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1F2937;
+      text-decoration: none;
+    }
+    .logo span {
+      color: #EA580C;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 12px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #4B5563;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    nav a:hover, nav a.active {
+      background-color: #EA580C;
+      color: #FFFFFF;
+    }
+
+    /* Контейнер */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+    .page-title {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .page-title span {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #EA580C;
+      background-color: #FFEDD5;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .page-title h1 {
+      font-size: 32px;
+      font-weight: 800;
+      margin: 12px 0 8px;
+    }
+    .page-title p {
+      color: #6B7280;
+      font-size: 16px;
+    }
+
+    /* Сетка советов */
+    .guides-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    .guide-card {
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .guide-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .guide-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .guide-sticker {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    .guide-header h2 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1.3;
+    }
+
+    .guide-body {
+      color: #4B5563;
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+    .guide-body ul {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+    .guide-body li {
+      margin-bottom: 6px;
+    }
+
+    /* Блок памятки */
+    .memo-banner {
+      background: #FFF7ED;
+      border: 1px dashed #EA580C;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .memo-sticker {
+      font-size: 42px;
+      flex-shrink: 0;
+    }
+    .memo-text h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #9A3412;
+      margin-bottom: 4px;
+    }
+    .memo-text p {
+      font-size: 14px;
+      color: #C2410C;
+    }
+
+    footer {
+      border-top: 1px solid #E5E7EB;
+      background: #FFFFFF;
+      text-align: center;
+      padding: 24px;
+      font-size: 14px;
+      color: #6B7280;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Навигация -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo">Просто<span>Вкусно</span></a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="recipes.html">Рецепты</a></li>
+          <li><a href="guide.html" class="active">Советы</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-title">
+      <span>Базовая кулинария</span>
+      <h1>Полезные советы на кухне</h1>
+      <p>Маленькие хитрости, которые сэкономят время и сделают любую еду вкуснее</p>
+    </div>
+
+    <div class="guides-grid">
+      <!-- Совет 1 -->
+      <article class="guide-card">
+        <div class="guide-header">
+          <div class="guide-sticker">🧂</div>
+          <h2>Как правильно солить еду</h2>
+        </div>
+        <div class="guide-body">
+          <p>Золотые правила соли, которые уберегут от испорченного обеда:</p>
+          <ul>
+            <li><strong>Бульоны и макароны:</strong> солите воду сразу в начале закипания.</li>
+            <li><strong>Жареное мясо:</strong> солите в середине или в конце, чтобы мясо не теряло сок.</li>
+            <li><strong>Жареный картофель:</strong> строго в последние 3 минуты жарки, иначе картошка размякнет и не будет хрустеть.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Совет 2 -->
+      <article class="guide-card">
+        <div class="guide-header">
+          <div class="guide-sticker">🍳</div>
+          <h2>Секрет идеальной сковороды</h2>
+        </div>
+        <div class="guide-body">
+          <p>Чтобы блюда не прилипали и получали аппетитную корочку:</p>
+          <ul>
+            <li>Всегда хорошо разогревайте сковороду <strong>до</strong> добавления масла.</li>
+            <li>Масло должно растекаться свободно и стать горячим перед тем, как выкладывать еду.</li>
+            <li>Не перегружайте сковороду — если продуктов слишком много, они начинают вариться в собственном пару.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Совет 3 -->
+      <article class="guide-card">
+        <div class="guide-header">
+          <div class="guide-sticker">🔪</div>
+          <h2>Безопасность и порядок</h2>
+        </div>
+        <div class="guide-body">
+          <p>Организация рабочего места ускоряет готовку в два раза:</p>
+          <ul>
+            <li>Под разделочную доску подложите влажную салфетку — доска не будет скользить по столу.</li>
+            <li>Подготовьте и нарежьте все ингредиенты <strong>до</strong> включения плиты.</li>
+            <li>Острый нож намного безопаснее тупого, так как он не соскальзывает с овощей.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Совет 4 -->
+      <article class="guide-card">
+        <div class="guide-header">
+          <div class="guide-sticker">🍚</div>
+          <h2>Варка круп без пригорания</h2>
+        </div>
+        <div class="guide-body">
+          <p>Универсальные пропорции для идеальной рассыпчатости:</p>
+          <ul>
+            <li><strong>Рис:</strong> строго 1 часть риса на 2 части кипятка, 15 минут под плотной крышкой на минимуме.</li>
+            <li><strong>Гречка:</strong> 1 часть крупы на 2 части воды. Не мешайте ложкой во время варки!</li>
+            <li>Всегда давайте крупе постоять 5 минут под крышкой после выключения плиты.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+
+    <!-- Памятка -->
+    <div class="memo-banner">
+      <div class="memo-sticker">💡</div>
+      <div class="memo-text">
+        <h3>Главное правило начинающего кулинара</h3>
+        <p>Не бойтесь экспериментировать и пробовать еду в процессе приготовления. Если чувствуете, что не хватает вкуса — добавьте щепотку соли, немного черного перца или пару капель лимонного сока.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 «ПростоВкусно» — учебный веб-проект по лабораторной работе №3.</p>
+  </footer>
+
+</body>
+</html>

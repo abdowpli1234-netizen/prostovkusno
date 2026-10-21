@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Рецепты — ПростоВкусно</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background-color: #FAF8F5;
+      color: #1F2937;
+      line-height: 1.5;
+    }
+
+    /* Шапка сайта */
+    header {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E5E7EB;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1F2937;
+      text-decoration: none;
+    }
+    .logo span {
+      color: #EA580C;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 12px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #4B5563;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    nav a:hover, nav a.active {
+      background-color: #EA580C;
+      color: #FFFFFF;
+    }
+
+    /* Главный контейнер */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+    .page-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .page-title span {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #EA580C;
+      background-color: #FFEDD5;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .page-title h1 {
+      font-size: 32px;
+      font-weight: 800;
+      margin: 12px 0 8px;
+    }
+    .page-title p {
+      color: #6B7280;
+      font-size: 16px;
+    }
+
+    /* Вкладки категорий */
+    .filter-tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+    .tab-btn {
+      background: #FFFFFF;
+      border: 1px solid #D1D5DB;
+      color: #374151;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover {
+      background: #F3F4F6;
+      border-color: #9CA3AF;
+    }
+    .tab-btn.active {
+      background-color: #EA580C;
+      color: #FFFFFF;
+      border-color: #EA580C;
+      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+    }
+
+    /* Сетка карточек */
+    .recipes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 24px;
+    }
+
+    .recipe-card {
+      background: #FFFFFF;
+      border-radius: 18px;
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .recipe-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Иконки-стикеры */
+    .card-header-media {
+      background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 58px;
+      position: relative;
+      user-select: none;
+    }
+    .category-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: #FFFFFF;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #EA580C;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .meta-time {
+      font-size: 13px;
+      font-weight: 600;
+      color: #EA580C;
+      margin-bottom: 6px;
+    }
+    .card-title {
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      color: #4B5563;
+      font-size: 14px;
+      line-height: 1.45;
+      margin-bottom: 14px;
+      flex-grow: 1;
+    }
+
+    .card-ingredients {
+      background-color: #F9FAFB;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #374151;
+      margin-bottom: 16px;
+    }
+    .card-ingredients strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #1F2937;
+    }
+
+    /* Кнопка пошаговых действий */
+    .card-action {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background-color: #FFF7ED;
+      color: #EA580C;
+      border: none;
+      padding: 11px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .card-action:hover {
+      background-color: #EA580C;
+      color: #FFFFFF;
+    }
+
+    .recipe-card.hide {
+      display: none !important;
+    }
+
+    /* Всплывающее модальное окно */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(17, 24, 39, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-window {
+      background: #FFFFFF;
+      border-radius: 20px;
+      max-width: 620px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      position: relative;
+      animation: modalSlide 0.25s ease-out;
+    }
+    @keyframes modalSlide {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: #F3F4F6;
+      border: none;
+      font-size: 20px;
+      font-weight: bold;
+      color: #4B5563;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .modal-close-btn:hover {
+      background: #E5E7EB;
+      color: #111827;
+    }
+    .modal-icon {
+      font-size: 48px;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+    .modal-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      color: #111827;
+    }
+    .modal-time {
+      font-size: 14px;
+      font-weight: 700;
+      color: #EA580C;
+      margin-bottom: 18px;
+    }
+    .modal-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #374151;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #F3F4F6;
+      padding-bottom: 4px;
+    }
+    .modal-ingredients {
+      background-color: #FFF7ED;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      color: #7C2D12;
+      line-height: 1.6;
+    }
+    .modal-steps {
+      padding-left: 20px;
+      font-size: 14.5px;
+      color: #374151;
+      line-height: 1.6;
+    }
+    .modal-steps li {
+      margin-bottom: 10px;
+    }
+
+    footer {
+      border-top: 1px solid #E5E7EB;
+      background: #FFFFFF;
+      text-align: center;
+      padding: 24px;
+      font-size: 14px;
+      color: #6B7280;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Меню сайта -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo">Просто<span>Вкусно</span></a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="recipes.html" class="active">Рецепты</a></li>
+          <li><a href="guide.html">Советы</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-title">
+      <span>Базовая кухня</span>
+      <h1>Каталог рецептов</h1>
+      <p>Выберите нужный раздел и нажмите «Пошаговые действия»</p>
+    </div>
+
+    <!-- КНОПКИ ВЫБОРА КАТЕГОРИИ -->
+    <div class="filter-tabs">
+      <button class="tab-btn active" data-filter="all">Все блюда</button>
+      <button class="tab-btn" data-filter="breakfast">🍳 Завтраки</button>
+      <button class="tab-btn" data-filter="main">🍗 Основные блюда</button>
+      <button class="tab-btn" data-filter="side">🥗 Гарниры</button>
+    </div>
+
+    <!-- КАРТОЧКИ С РЕЦЕПТАМИ -->
+    <div class="recipes-grid">
+
+      <!-- ================= 1. ЗАВТРАКИ ================= -->
+      <!-- Омлет -->
+      <article class="recipe-card" data-category="breakfast"
+        data-icon="🍳"
+        data-time="⏱ 10 минут"
+        data-full-title="Омлет на сковороде"
+        data-ingredients-full="Яйца куриные — 3 шт; Молоко — 50 мл; Сливочное масло — 15 г; Соль и перец — по вкусу."
+        data-steps="Разбейте яйца в глубокую миску, влейте молоко, добавьте щепотку соли и взбейте вилкой до однородности.|Растопите кусочек сливочного масла на сковороде на среднем огне.|Вылейте яичную смесь, накройте сковороду крышкой и убавьте огонь до минимума.|Готовьте 5-7 минут, пока верхушка не станет плотной и омлет не поднимется. Подавайте горячим.">
+        <div class="card-header-media">
+          🍳
+          <span class="category-badge">Завтрак</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 10 минут</div>
+          <h2 class="card-title">Омлет на сковороде</h2>
+          <p class="card-desc">Классический пышный омлет с молоком и сливочным маслом под крышкой.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Яйца (3 шт), молоко (50 мл), сливочное масло, соль.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Сырники -->
+      <article class="recipe-card" data-category="breakfast"
+        data-icon="🥞"
+        data-time="⏱ 15 минут"
+        data-full-title="Сырники на сковороде"
+        data-ingredients-full="Творог 5-9% (сухой) — 300 г; Яйцо куриное — 1 шт; Мука — 2 ст. л. (+1 ст. л. для обвалки); Сахар — 1 ст. л.; Растительное масло для жарки."
+        data-steps="Разомните творог вилкой в миске, добавьте яйцо, сахар и щепотку соли, хорошо перемешайте.|Всыпьте муку и замесите мягкое творожное тесто.|Сформируйте небольшие круглые шайбочки и слегка обваляйте их в муке.|Разогрейте масло на сковороде и обжаривайте сырники на среднем огне по 3-4 минуты с каждой стороны до румяной корочки.">
+        <div class="card-header-media">
+          🥞
+          <span class="category-badge">Завтрак</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 15 минут</div>
+          <h2 class="card-title">Сырники на сковороде</h2>
+          <p class="card-desc">Нежные домашние творожные сырники с аппетитной золотистой корочкой.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Творог (300 г), 1 яйцо, мука (2 ст. л.), сахар (1 ст. л.).
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Овсяная каша -->
+      <article class="recipe-card" data-category="breakfast"
+        data-icon="🥣"
+        data-time="⏱ 12 минут"
+        data-full-title="Овсяная каша с яблоком"
+        data-ingredients-full="Овсяные хлопья — 60 г; Молоко или вода — 220 мл; Яблоко — 1/2 шт; Сливочное масло — 10 г; Сахар или мед — 1 ч. л.; Корица — щепотка."
+        data-steps="В небольшом ковшике доведите молоко до кипения.|Всыпьте овсяные хлопья, убавьте огонь и варите 7-10 минут, периодически помешивая.|Пока каша варится, нарежьте половинку яблока кубиками.|Снимите готовую кашу с огня, положите сливочное масло, кусочки яблока и посыпьте корицей.">
+        <div class="card-header-media">
+          🥣
+          <span class="category-badge">Завтрак</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 12 минут</div>
+          <h2 class="card-title">Овсяная каша с яблоком</h2>
+          <p class="card-desc">Питательная овсяная каша на молоке со свежими кусочками яблока и корицей.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Хлопья овсяные (60 г), молоко (200 мл), яблоко, корица.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Горячие бутерброды -->
+      <article class="recipe-card" data-category="breakfast"
+        data-icon="🥪"
+        data-time="⏱ 8 минут"
+        data-full-title="Горячие бутерброды с сыром"
+        data-ingredients-full="Хлеб для тостов — 2 ломтика; Сыр твердый — 50 г; Помидор — 2 кружочка; Сливочное масло — 10 г."
+        data-steps="Смажьте ломтики хлеба с одной стороны тонким слоем сливочного масла.|Положите ломтик сыра, кружочки помидора и еще один ломтик сыра между кусочками хлеба.|Выложите бутерброд на сковороду маслом вниз.|Обжарьте под крышкой по 2-3 минуты с каждой стороны, пока хлеб не подрумянится, а сыр полностью не расплавится.">
+        <div class="card-header-media">
+          🥪
+          <span class="category-badge">Завтрак</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 8 минут</div>
+          <h2 class="card-title">Горячие бутерброды с сыром</h2>
+          <p class="card-desc">Хрустящие тосты с тягучим сыром и сочным помидором.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Хлеб (2 ломтика), сыр (50 г), помидор, сливочное масло.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Французские тосты -->
+      <article class="recipe-card" data-category="breakfast"
+        data-icon="🍞"
+        data-time="⏱ 10 минут"
+        data-full-title="Французские сладкие тосты"
+        data-ingredients-full="Батон или тостовый хлеб — 3 ломтика; Яйцо — 1 шт; Молоко — 40 мл; Сахар — 1 ч. л.; Корица — щепотка; Сливочное масло для жарки."
+        data-steps="В глубокой тарелке вилкой взбейте яйцо с молоком, сахаром и молотой корицей.|Растопите кусочек сливочного масла на сковороде на умеренном огне.|Обмакните каждый ломтик батона в яичную смесь на 5-10 секунд с обеих сторон.|Обжаривайте тосты примерно по 2 минуты с каждого бока до красивой румяной корочки.">
+        <div class="card-header-media">
+          🍞
+          <span class="category-badge">Завтрак</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 10 минут</div>
+          <h2 class="card-title">Французские тосты</h2>
+          <p class="card-desc">Ароматные сладкие гренки с молоком, сахаром и корицей.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Батон (3 ломтика), яйцо (1 шт), молоко (40 мл), корица.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- ================= 2. ОСНОВНЫЕ БЛЮДА ================= -->
+      <!-- Курица с овощами -->
+      <article class="recipe-card" data-category="main"
+        data-icon="🍗"
+        data-time="⏱ 30 минут"
+        data-full-title="Курица с овощами на сковороде"
+        data-ingredients-full="Куриное филе — 400 г; Сладкий перец — 1 шт; Морковь — 1 шт; Луковица — 1 шт; Масло растительное — 2 ст. л.; Соль, перец, паприка."
+        data-steps="Филе промойте и нарежьте кубиками. Лук нарежьте полукольцами, морковь и перец — соломкой.|В сковороде разогрейте масло и обжарьте курицу на сильном огне 5 минут до легкой корочки.|Добавьте лук и морковь, убавьте огонь и обжаривайте еще 5 минут.|Добавьте перец, соль, специи, перемешайте, накройте крышкой и тушите 10 минут до мягкости овощей.">
+        <div class="card-header-media">
+          🍗
+          <span class="category-badge">Основное блюдо</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 30 минут</div>
+          <h2 class="card-title">Курица с овощами</h2>
+          <p class="card-desc">Сочные кусочки куриного филе, тушенные со сладким перцем и луком.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Куриное филе (400 г), сладкий перец, морковь, луковица, масло.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Гречка по-купечески -->
+      <article class="recipe-card" data-category="main"
+        data-icon="🥘"
+        data-time="⏱ 35 минут"
+        data-full-title="Гречка по-купечески с фаршем"
+        data-ingredients-full="Гречневая крупа — 1 стакан; Мясной фарш — 300 г; Луковица — 1 шт; Морковь — 1 шт; Вода (кипяток) — 2 стакана; Соль, масло растительное."
+        data-steps="Мелко нарежьте лук, натрите морковь. Обжарьте на сковороде с маслом 3-4 минуты.|Добавьте в сковороду фарш и жарьте около 7 минут, разбивая комочки лопаткой.|Промойте гречку и высыпьте ее ровным слоем прямо к мясу с овощами.|Посолите и залейте 2 стаканами кипятка.|Накройте крышкой, уменьшите огонь до минимума и варите 18-20 минут, пока не выкипит вся вода.">
+        <div class="card-header-media">
+          🥘
+          <span class="category-badge">Основное блюдо</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 35 минут</div>
+          <h2 class="card-title">Гречка по-купечески</h2>
+          <p class="card-desc">Сытная рассыпчатая гречка, сваренная с мясным фаршем и овощами.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Гречка (1 стакан), мясной фарш (300 г), морковь, лук.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Запеченная рыба -->
+      <article class="recipe-card" data-category="main"
+        data-icon="🐟"
+        data-time="⏱ 25 минут"
+        data-full-title="Запеченная рыба с лимоном"
+        data-ingredients-full="Филе белой рыбы (минтай, треска) — 400 г; Лимон — 1/2 шт; Растительное масло — 1 ст. л.; Соль, сушеный чеснок, перец."
+        data-steps="Разогрейте духовку до 180°C. Застелите форму пергаментом.|Рыбное филе промокните салфеткой, натрите солью, перцем и сушеным чесноком.|Выложите филе в форму, сбрызните маслом и сверху положите тонкие ломтики лимона.|Запекайте в духовке 20 минут. Рыба получается нежной, сочной и без лишнего жира.">
+        <div class="card-header-media">
+          🐟
+          <span class="category-badge">Основное блюдо</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 25 минут</div>
+          <h2 class="card-title">Запеченная рыба с лимоном</h2>
+          <p class="card-desc">Филе белой рыбы в духовке с лимоном и специями.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Филе рыбы (400 г), дольки лимона, масло, специи.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Домашние котлеты -->
+      <article class="recipe-card" data-category="main"
+        data-icon="🧆"
+        data-time="⏱ 30 минут"
+        data-full-title="Домашние сочные котлеты"
+        data-ingredients-full="Мясной фарш — 450 г; Лук — 1 шт; Белый хлеб — 2 ломтика (размочить в воде); Яйцо — 1 шт; Соль, перец, масло для жарки."
+        data-steps="Отожмите хлеб от лишней влаги. Лук очень мелко порубите.|В миске соедините фарш, лук, размятый хлеб, яйцо, соль и перец. Тщательно вымесите руками.|Смочите руки водой и слепите аккуратные котлеты.|Обжаривайте на разогретой сковороде с маслом по 4 минуты с одной стороны, затем переверните, накройте крышкой и томите еще 7 минут на медленном огне.">
+        <div class="card-header-media">
+          🧆
+          <span class="category-badge">Основное блюдо</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 30 минут</div>
+          <h2 class="card-title">Домашние котлеты</h2>
+          <p class="card-desc">Традиционные сочные мясные котлеты с румяной корочкой.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Фарш (450 г), лук (1 шт), замоченный хлеб, яйцо, специи.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Спагетти Болоньезе -->
+      <article class="recipe-card" data-category="main"
+        data-icon="🍝"
+        data-time="⏱ 25 минут"
+        data-full-title="Спагетти с соусом Болоньезе"
+        data-ingredients-full="Спагетти — 250 г; Мясной фарш — 300 г; Томатная паста или соус — 150 г; Луковица — 1 шт; Чеснок — 2 зубчика; Соль, базилик, масло."
+        data-steps="Отварите спагетти в кипящей подсоленной воде по инструкции на упаковке.|На сковороде обжарьте мелко нарезанный лук и чеснок 2 минуты.|Добавьте фарш и обжаривайте, помешивая, около 8 минут.|Влейте томатный соус, посолите, всыпьте базилик и тушите на медленном огне 5 минут.|Выложите порцию спагетти на тарелку и полейте горячим мясным соусом.">
+        <div class="card-header-media">
+          🍝
+          <span class="category-badge">Основное блюдо</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 25 минут</div>
+          <h2 class="card-title">Спагетти «Болоньезе»</h2>
+          <p class="card-desc">Паста с сытным соусом из обжаренного мясного фарша и томатов.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Спагетти (250 г), фарш (300 г), томатный соус, чеснок, специи.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- ================= 3. ГАРНИРЫ ================= -->
+      <!-- Паста с соусом -->
+      <article class="recipe-card" data-category="side"
+        data-icon="🍝"
+        data-time="⏱ 20 минут"
+        data-full-title="Паста с томатным соусом"
+        data-ingredients-full="Макароны или спагетти — 200 г; Томаты в собственном соку — 1 банка; Чеснок — 2 зубчика; Масло оливковое — 2 ст. л.; Соль, базилик."
+        data-steps="Отварите пасту в кипящей подсоленной воде до состояния аль денте.|В сковороде нагрейте масло и обжарьте измельченный чеснок 30 секунд.|Добавьте размятые томаты, базилик и соль. Тушите соус на среднем огне 7 минут.|Переложите готовую пасту в соус, перемешайте и прогрейте еще 1 минуту.">
+        <div class="card-header-media">
+          🍝
+          <span class="category-badge">Гарнир</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 20 минут</div>
+          <h2 class="card-title">Паста с томатным соусом</h2>
+          <p class="card-desc">Спагетти с густым ароматным чесночно-томатным соусом.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Паста (200 г), томаты в с/с, зубчик чеснока, базилик.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Картофель на сковороде -->
+      <article class="recipe-card" data-category="side"
+        data-icon="🥔"
+        data-time="⏱ 25 минут"
+        data-full-title="Картофель жареный на сковороде"
+        data-ingredients-full="Картофель — 5 шт; Масло растительное — 3 ст. л.; Чеснок — 2 зубчика; Свежий укроп; Соль — по вкусу (в самом конце)."
+        data-steps="Очистите картофель и нарежьте одинаковыми брусочками.|Обязательно обсушите ломтики полотенцем от лишней влаги (для хруста).|Разогрейте масло на сковороде, выложите картофель и жарьте первые 5-6 минут без крышки, не перемешивая.|Переверните лопаткой и жарьте еще 10 минут. В самом конце добавьте соль, измельченный чеснок и зелень.">
+        <div class="card-header-media">
+          🥔
+          <span class="category-badge">Гарнир</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 25 минут</div>
+          <h2 class="card-title">Картофель на сковороде</h2>
+          <p class="card-desc">Хрустящий жареный картофель с чесноком и свежим укропом.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Картофель (5 шт), растительное масло, чеснок, соль, укроп.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Рис с овощами -->
+      <article class="recipe-card" data-category="side"
+        data-icon="🍚"
+        data-time="⏱ 20 минут"
+        data-full-title="Рассыпчатый рис с овощами"
+        data-ingredients-full="Рис — 1 стакан; Овощная смесь (горошек, кукуруза, морковь) — 150 г; Вода — 2 стакана; Масло растительное — 2 ст. л.; Соль — 1 ч. л."
+        data-steps="Рис промойте в холодной воде 2-3 раза.|В глубокой сковороде нагрейте масло и обжарьте овощную смесь пару минут.|Всыпьте промытый рис к овощам и перемешайте, прогревая 1 минуту.|Залейте 2 стаканами кипятка, посолите, плотно закройте крышкой и варите на самом слабом огне 15 минут, не поднимая крышку.">
+        <div class="card-header-media">
+          🍚
+          <span class="category-badge">Гарнир</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 20 минут</div>
+          <h2 class="card-title">Рассыпчатый рис с овощами</h2>
+          <p class="card-desc">Длиннозерный рис со смесью сладкой кукурузы, горошка и моркови.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Рис (1 стакан), овощная смесь (150 г), вода (2 стакана), соль.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Запеченные овощи -->
+      <article class="recipe-card" data-category="side"
+        data-icon="🥦"
+        data-time="⏱ 25 минут"
+        data-full-title="Запеченные сезонные овощи"
+        data-ingredients-full="Кабачок — 1 шт; Морковь — 1 шт; Болгарский перец — 1 шт; Масло растительное — 2 ст. л.; Соль, травы прованские."
+        data-steps="Разогрейте духовку до 200°C.|Нарежьте овощи крупными одинаковыми дольками.|Сложите все овощи в миску, полейте маслом, посыпьте солью и травами, хорошо перемешайте.|Выложите на противень в один слой и запекайте 20-25 минут до золотистых краев.">
+        <div class="card-header-media">
+          🥦
+          <span class="category-badge">Гарнир</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 25 минут</div>
+          <h2 class="card-title">Запеченные овощи</h2>
+          <p class="card-desc">Кусочки кабачков, моркови и перца в духовке с ароматными травами.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Кабачок (1 шт), морковь (1 шт), перец, масло, специи.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+      <!-- Греческий салат -->
+      <article class="recipe-card" data-category="side"
+        data-icon="🥗"
+        data-time="⏱ 10 минут"
+        data-full-title="Свежий греческий салат"
+        data-ingredients-full="Огурцы — 2 шт; Помидоры — 2 шт; Сладкий перец — 1 шт; Сыр фета или брынза — 80 г; Масло оливковое — 2 ст. л.; Соль, орегано."
+        data-steps="Огурцы и помидоры нарежьте крупными дольками.|Перец очистите от семян и нарежьте соломкой.|Сложите овощи в салатник, посолите, полейте оливковым маслом и перемешайте.|Сверху выложите кубики сыра и посыпьте орегано. Идеальный легкий гарнир готов.">
+        <div class="card-header-media">
+          🥗
+          <span class="category-badge">Гарнир</span>
+        </div>
+        <div class="card-body">
+          <div class="meta-time">⏱ 10 минут</div>
+          <h2 class="card-title">Свежий греческий салат</h2>
+          <p class="card-desc">Хрустящие огурцы, спелые томаты, сладкий перец и мягкий сыр.</p>
+          <div class="card-ingredients">
+            <strong>Ингредиенты:</strong>
+            Огурцы (2 шт), томаты (2 шт), сыр фета (80 г), масло, орегано.
+          </div>
+          <button class="card-action btn-open-recipe">Пошаговые действия</button>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- МОДАЛЬНОЕ ОКНО -->
+  <div class="modal-overlay" id="recipeModal">
+    <div class="modal-window">
+      <button class="modal-close-btn" id="modalClose">&times;</button>
+      <div class="modal-icon" id="modalIcon">🍳</div>
+      <h2 class="modal-title" id="modalTitle">Название рецепта</h2>
+      <div class="modal-time" id="modalTime">⏱ Время приготовления</div>
+
+      <div class="modal-section-title">Ингредиенты:</div>
+      <div class="modal-ingredients" id="modalIngredients"></div>
+
+      <div class="modal-section-title">Пошаговое приготовление:</div>
+      <ol class="modal-steps" id="modalSteps"></ol>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 «ПростоВкусно» — учебный веб-проект по лабораторной работе №3[span_0](start_span)[span_0](end_span).</p>
+  </footer>
+
+  <!-- Скрипт переключения и открытия пошаговых шагов -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Фильтр кнопок
+      const buttons = document.querySelectorAll('.tab-btn');
+      const cards = document.querySelectorAll('.recipe-card');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+          buttons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+
+          const filterValue = button.getAttribute('data-filter');
+
+          cards.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            if (filterValue === 'all' || cardCategory === filterValue) {
+              card.classList.remove('hide');
+            } else {
+              card.classList.add('hide');
+            }
+          });
+        });
+      });
+
+      // 2. Всплывающее окно с инструкцией
+      const modal = document.getElementById('recipeModal');
+      const modalClose = document.getElementById('modalClose');
+      const modalIcon = document.getElementById('modalIcon');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalTime = document.getElementById('modalTime');
+      const modalIngredients = document.getElementById('modalIngredients');
+      const modalSteps = document.getElementById('modalSteps');
+
+      document.querySelectorAll('.btn-open-recipe').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const card = e.target.closest('.recipe-card');
+          
+          modalIcon.textContent = card.getAttribute('data-icon') || '🍳';
+          modalTitle.textContent = card.getAttribute('data-full-title') || 'Рецепт';
+          modalTime.textContent = card.getAttribute('data-time') || '';
+          modalIngredients.textContent = card.getAttribute('data-ingredients-full') || '';
+
+          modalSteps.innerHTML = '';
+          const rawSteps = card.getAttribute('data-steps') || '';
+          if (rawSteps) {
+            const stepsList = rawSteps.split('|');
+            stepsList.forEach(step => {
+              if (step.trim()) {
+                const li = document.createElement('li');
+                li.textContent = step.trim();
+                modalSteps.appendChild(li);
+              }
+            });
+          }
+
+          modal.classList.add('active');
+        });
+      });
+
+      // Закрытие окна
+      modalClose.addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
